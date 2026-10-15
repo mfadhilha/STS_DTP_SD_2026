@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $user = 'root';
-$pass = '13421342';
+$pass = '';
 $db   = 'db_laporan_fasilitas';
 
 try {
