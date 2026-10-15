@@ -9,16 +9,16 @@ if (isset($_POST['kirim'])) {
     $deskripsi      = $_POST['deskripsi'];
     $prioritas      = $_POST['prioritas'];
 
-    $stmt = $koneksi->prepare("INSERT INTO laporan_kerusakan (nama_pelapor, nama_fasilitas, lokasi, id_kategori, deskripsi, prioritas) VALUES (:pelapor, :fasilitas, :lokasi, :kategori, :deskripsi, :prioritas)");
+    $stmt = $koneksi->prepare("INSERT INTO laporan_kerusakan (nama_pelapor, nama_fasilitas, lokasi, id_kategori, deskripsi, prioritas) VALUES (?, ?, ?, ?, ?, ?)");
 
     try {
         $stmt->execute([
-            ':pelapor'   => $nama_pelapor,
-            ':fasilitas' => $nama_fasilitas,
-            ':lokasi'    => $lokasi,
-            ':kategori'  => $id_kategori,
-            ':deskripsi' => $deskripsi,
-            ':prioritas' => $prioritas
+            $nama_pelapor,
+            $nama_fasilitas,
+            $lokasi,
+            $id_kategori,
+            $deskripsi,
+            $prioritas
         ]);
         header("Location: index.php");
         exit;
