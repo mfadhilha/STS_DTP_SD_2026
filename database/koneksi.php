@@ -4,11 +4,11 @@ $user = 'root';
 $pass = '13421342';
 $db   = 'db_laporan_fasilitas';
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
 try {
-    $koneksi = new mysqli($host, $user, $pass, $db);
-    $koneksi->set_charset('utf8mb4');
-} catch (mysqli_sql_exception $e) {
+    $koneksi = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+} catch (PDOException $e) {
     die('Koneksi database gagal');
 }
