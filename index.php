@@ -9,18 +9,25 @@ if (isset($_POST['kirim'])) {
     $deskripsi      = $_POST['deskripsi'];
     $prioritas      = $_POST['prioritas'];
 
-    $stmt = $koneksi->prepare("INSERT INTO laporan_kerusakan (nama_pelapor, nama_fasilitas, lokasi, id_kategori, deskripsi, prioritas) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssiss", $nama_pelapor, $nama_fasilitas, $lokasi, $id_kategori, $deskripsi, $prioritas);
+    $stmt = $koneksi->prepare("INSERT INTO laporan_kerusakan (nama_pelapor, nama_fasilitas, lokasi, id_kategori, deskripsi, prioritas) VALUES (:pelapor, :fasilitas, :lokasi, :kategori, :deskripsi, :prioritas)");
 
-    if ($stmt->execute()) {
+    try {
+        $stmt->execute([
+            ':pelapor'   => $nama_pelapor,
+            ':fasilitas' => $nama_fasilitas,
+            ':lokasi'    => $lokasi,
+            ':kategori'  => $id_kategori,
+            ':deskripsi' => $deskripsi,
+            ':prioritas' => $prioritas
+        ]);
         header("Location: index.php");
         exit;
-    } else {
+    } catch (PDOException $e) {
         echo "Gagal menyimpan laporan";
     }
 }
 
-$hasil = mysqli_query($koneksi, "SELECT * FROM laporan_kerusakan ORDER BY tanggal_laporan DESC");
+$hasil = $koneksi->query("SELECT * FROM laporan_kerusakan ORDER BY tanggal_laporan DESC");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -127,7 +134,7 @@ $hasil = mysqli_query($koneksi, "SELECT * FROM laporan_kerusakan ORDER BY tangga
                 <tbody>
                     <?php
                     $no = 1;
-                    while ($row = mysqli_fetch_assoc($hasil)) {
+                    while ($row = $hasil->fetch()) {
                     ?>
                         <tr>
                             <td><?php echo $no; ?></td>
